@@ -175,18 +175,19 @@ class Circle extends TwoD {
         this(c.sc, c.a);
     }
 
-    int getRadius() {
+    public int getRadius() {
         return getA();
     }
 
     @Override
     public double perimeter() {
-        return 0;
+        return 2 * pi * getRadius();
     }
 
     @Override
     public double area() {
-        return pi;
+        double radiusSquared = Math.pow(getRadius(), 2);
+        return pi * radiusSquared;
     }
 
     public void set(ShapeColor sc, int radius) {
@@ -232,6 +233,32 @@ class Rectangle extends TwoD {
     }
 }
 
+class Triangle extends TwoD {
+
+    @Override
+    public double perimeter() {
+        return 0;
+    }
+
+    @Override
+    public double area() {
+        return 0;
+    }
+}
+
+class Trapezoid extends TwoD {
+
+    @Override
+    public double perimeter() {
+        return 0;
+    }
+
+    @Override
+    public double area() {
+        return 0;
+    }
+}
+
 
 public class A2_S4_2022 {
     private static int getInt() {
@@ -257,5 +284,7 @@ public class A2_S4_2022 {
         Circle testCircle = new Circle(ShapeColor.Blue, 12);
 
         System.out.println(testCircle);
+        System.out.println(testCircle.area());
+        System.out.println(testCircle.perimeter());
     }
 }
