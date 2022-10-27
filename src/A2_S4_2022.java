@@ -1,3 +1,5 @@
+import java.util.*;
+
 enum ShapeColor {
     Blue,
     Yellow,
@@ -112,7 +114,7 @@ abstract class TwoD implements ForTwoD, Shape {
 
     @Override
     public void recolor(ShapeColor sc) {
-
+        this.sc = sc;
     }
 
     @Override
@@ -144,6 +146,10 @@ abstract class ThreeD implements  ForThreeD, Shape {
         return a;
     }
 
+    ShapeColor getShapeColor() {
+        return sc;
+    }
+
     public void set(ShapeColor sc, double a) {
         this.sc = sc;
         this.a = a;
@@ -151,12 +157,11 @@ abstract class ThreeD implements  ForThreeD, Shape {
 
     public void resize(double percentage) {
 
-
     }
 
     @Override
     public String toString() {
-        return super.toString();
+        return "(3D (" + getShapeColor() + ", " + getA() + "))";
     }
 }
 
@@ -191,6 +196,7 @@ class Circle extends TwoD {
         return pi * radiusSquared;
     }
 
+    @Override
     public void set(ShapeColor sc, int radius) {
         this.sc = sc;
         this.a = radius;
@@ -275,18 +281,22 @@ class Triangle extends TwoD {
         return Math.sqrt(S * (S - getA()) * (S - getB()) * (S - getC()));
     }
 
+    @Override
     public int getA() {
         return a;
     }
 
+    @Override
     public int getB() {
         return b;
     }
 
+    @Override
     public int getC() {
         return c;
     }
 
+    @Override
     public void set(ShapeColor sc, int a, int b, int c) {
         this.sc = sc;
         this.a = a;
@@ -337,18 +347,22 @@ class Trapezoid extends TwoD {
         return aPlusBDivTwo * getHeight();
     }
 
+    @Override
     public int getA() {
         return a;
     }
 
+    @Override
     public int getB() {
         return b;
     }
 
+    @Override
     public int getC() {
         return c;
     }
 
+    @Override
     public int getD() {
         return d;
     }
@@ -399,6 +413,7 @@ class Cube extends ThreeD {
         return 6.0 * Math.pow(getA(), 2);
     }
 
+    @Override
     double getA() {
         return a;
     }
@@ -410,7 +425,7 @@ class Cube extends ThreeD {
 
     @Override
     public String toString() {
-        return "Cube (3D (" + this.sc + ", " + getA() + "))";
+        return "Cube (3D (" + getShapeColor() + ", " + getA() + "))";
     }
 }
 
@@ -426,18 +441,25 @@ class Tetrahedron extends ThreeD {
         this.a = a;
     }
 
+
     public Tetrahedron(Tetrahedron t) {
         this(t.sc, t.a);
     }
 
     @Override
     public double volume() {
-        return 0;
+        double aCubed = Math.pow(getA(), 3);
+        double sixSquareRootTwo = 6 * Math.sqrt(2);
+        return (aCubed) / (sixSquareRootTwo);
     }
 
     @Override
     public double area() {
-        return 0;
+        return Math.sqrt(3) * Math.pow(getA(), 2);
+    }
+
+    double getA() {
+        return a;
     }
 
     public void set(ShapeColor sc, double a) {
@@ -447,52 +469,155 @@ class Tetrahedron extends ThreeD {
 
     @Override
     public String toString() {
-        return "Tetrahedron (3D (" + this.sc + ", " + getA() + "))";
+        return "Tetrahedron (3D (" + getShapeColor() + ", " + getA() + "))";
+    }
+}
+
+class Sphere extends ThreeD {
+
+    public Sphere() {
+        this.sc = ShapeColor.White;
+        this.a = 12;
+    }
+
+    public Sphere(ShapeColor sc, double a) {
+        this.sc = sc;
+        this.a = a;
+    }
+
+    public Sphere(Sphere s) {
+        this(s.sc, s.a);
+    }
+
+    @Override
+    double getA() {
+        return a;
+    }
+
+    @Override
+    public double volume() {
+        double fourPiRadiusCubed = 4 * pi * Math.pow(getA(), 3);
+        return fourPiRadiusCubed / 3;
+    }
+
+    @Override
+    public double area() {
+        return 4 * pi * Math.pow(getA(), 2);
+    }
+
+    @Override
+    public String toString() {
+        return "Sphere " + super.toString();
     }
 }
 
 
 public class A2_S4_2022 {
     private static int getInt() {
-        return 0;
+        Random rand = new Random();
+        int randInt = rand.nextInt(1, 20);
+        return randInt;
     }
 
     private static double getDouble() {
-        return 0.0;
+        Random rand = new Random();
+        double randDouble = rand.nextDouble(1.0, 20.0);
+        return randDouble;
     }
 
     private static ShapeColor getColor() {
-        return ShapeColor.Green;
+        Random rand = new Random();
+        int randInt = rand.nextInt(0, ShapeColor.values().length);
+        ShapeColor randomColor = ShapeColor.values()[randInt];
+
+        return randomColor;
     }
 
     private static boolean isTriangle(int a, int b, int c) {
-        if (a != 0 && b != 0 && c != 0) {
+        double hypotenuseSquared = Math.pow(c, 2);
+        double altitudeSquared = Math.pow(a, 2);
+        double baseSquared = Math.pow(b, 2);
+        if (a >= (b + c) || c >= (b + a) || b >= (a + c)) {
+            // Not a triangle
+            return false;
+        } else if (a == b && b == c) {
+            // Equilateral triangle
             return true;
-        } else  {
+        } else if ((altitudeSquared + baseSquared) == hypotenuseSquared || (altitudeSquared + hypotenuseSquared) == baseSquared ||
+                (hypotenuseSquared + baseSquared) == altitudeSquared) {
+            // Right triangle
+            return true;
+        } else if (a != b && b != c && c != a) {
+            // Scalene triangle
+            return true;
+        } else if ((a == b && b != c) || (c == a && a != b) || (c == b && c != a)) {
+            // Isosceles triangle
+            return true;
+        } else {
             return false;
         }
     }
-    public static void main(String[] args) {
-        Circle testCircle = new Circle(ShapeColor.Blue, 12);
-        Rectangle testRectangle = new Rectangle(ShapeColor.Red, 14, 9);
-        Triangle testTriangle = new Triangle(ShapeColor.Yellow, 3,6,7);
-        Trapezoid testTrapezoid = new Trapezoid(ShapeColor.Green,12,12,12,12,16);
-        Cube testCube = new Cube(ShapeColor.Blue, 12.0);
 
-        System.out.println(testCircle);
-        System.out.println(testCircle.area());
-        System.out.println(testCircle.perimeter());
-        System.out.println(testRectangle);
-        System.out.println(testRectangle.perimeter());
-        System.out.println(testRectangle.area());
-        System.out.println(testTriangle);
-        System.out.println(testTriangle.perimeter());
-        System.out.println(testTriangle.area());
-        System.out.println(testTrapezoid);
-        System.out.println(testTrapezoid.perimeter());
-        System.out.println(testTrapezoid.area());
-        System.out.println(testCube);
-        System.out.println(testCube.area());
-        System.out.println(testCube.volume());
+    private static TwoD getTwoD() {
+        Random rand = new Random();
+
+        List<TwoD> twoDShapes = Arrays.asList(new Circle(), new Rectangle(), new Triangle(), new Trapezoid());
+        int randIndex = rand.nextInt(0, twoDShapes.size());
+        TwoD newTwoDShape = twoDShapes.get(randIndex);
+
+        return newTwoDShape;
+    }
+
+    private static ThreeD getThreeD() {
+        Random rand = new Random();
+
+        List<ThreeD> threeDShapes = Arrays.asList(new Cube(), new Sphere(), new Tetrahedron());
+        int randIndex = rand.nextInt(0, threeDShapes.size());
+        ThreeD newThreeDShape = threeDShapes.get(randIndex);
+
+        return newThreeDShape;
+    }
+    public static void main(String[] args) {
+//        Circle testCircle = new Circle(ShapeColor.Blue, 12);
+//        Rectangle testRectangle = new Rectangle(ShapeColor.Red, 14, 9);
+//        Triangle testTriangle = new Triangle(ShapeColor.Yellow, 3,6,7);
+//        Trapezoid testTrapezoid = new Trapezoid(ShapeColor.Green,12,12,12,12,16);
+//        Cube testCube = new Cube(ShapeColor.Blue, 12.0);
+//        Tetrahedron testTetrahedron = new Tetrahedron(ShapeColor.White, 31);
+//        Sphere testSphere = new Sphere(ShapeColor.Yellow, 44);
+
+//        System.out.println(testCircle);
+//        System.out.println(testCircle.area());
+//        System.out.println(testCircle.perimeter());
+//        System.out.println(testRectangle);
+//        System.out.println(testRectangle.perimeter());
+//        System.out.println(testRectangle.area());
+//        System.out.println(testTriangle);
+//        System.out.println(testTriangle.perimeter());
+//        System.out.println(testTriangle.area());
+//        System.out.println(testTrapezoid);
+//        System.out.println(testTrapezoid.perimeter());
+//        System.out.println(testTrapezoid.area());
+//        System.out.println(testCube);
+//        System.out.println(testCube.area());
+//        System.out.println(testCube.volume());
+//        System.out.println(testTetrahedron);
+//        System.out.println(testTetrahedron.area());
+//        System.out.println(testTetrahedron.volume());
+//        System.out.println(testSphere);
+//        System.out.println(testSphere.area());
+//        System.out.println(testSphere.volume());
+
+        for (int i = 0; i < 10; i++) {
+            TwoD testShape = getTwoD();
+            System.out.println(testShape);
+        }
+
+        System.out.println("\n\n");
+
+        for (int j = 0; j < 10; j++) {
+            ThreeD testThreeDShape = getThreeD();
+            System.out.println(testThreeDShape);
+        }
     }
 }
