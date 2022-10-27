@@ -163,7 +163,8 @@ abstract class ThreeD implements  ForThreeD, Shape {
 class Circle extends TwoD {
 
     public Circle() {
-
+        this.sc = ShapeColor.Green;
+        this.a = 5;
     }
 
     public Circle(ShapeColor sc, int radius) {
@@ -204,7 +205,9 @@ class Circle extends TwoD {
 class Rectangle extends TwoD {
 
     public Rectangle() {
-
+        this.sc = ShapeColor.Green;
+        this.a = 10;
+        this.b = 10;
     }
 
     public Rectangle(ShapeColor sc, int length, int width) {
@@ -219,43 +222,232 @@ class Rectangle extends TwoD {
 
     @Override
     public double perimeter() {
-        return 0;
-    }
-
-    @Override
-    public void recolor(ShapeColor sc) {
-
+        double lengthPlusWidth = getA() + getB();
+        return 2 * lengthPlusWidth;
     }
 
     @Override
     public double area() {
-        return 0;
+        return getA() * getB();
+    }
+
+    public void set(ShapeColor sc, int length, int width) {
+        this.sc = sc;
+        this.a = length;
+        this.b = width;
+    }
+
+    @Override
+    public String toString() {
+        return "Rectangle (2D (" + getShapeColor() + ", " + getA() + ", " + getB() + "))";
     }
 }
 
 class Triangle extends TwoD {
 
+    public Triangle() {
+        this.sc = ShapeColor.Red;
+        this.a = 5;
+        this.b = 5;
+        this.c = 5;
+    }
+
+    public Triangle(ShapeColor sc, int a, int b, int c) {
+        this.sc = sc;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+
+    public Triangle(Triangle t) {
+        this(t.sc, t.a, t.b, t.c);
+    }
+
     @Override
     public double perimeter() {
-        return 0;
+        return getA() + getB() + getC();
     }
 
     @Override
     public double area() {
-        return 0;
+        // Finding the area using Heron's formula
+        double S = (getA() + getB() + getC()) / 2.0;
+        return Math.sqrt(S * (S - getA()) * (S - getB()) * (S - getC()));
+    }
+
+    public int getA() {
+        return a;
+    }
+
+    public int getB() {
+        return b;
+    }
+
+    public int getC() {
+        return c;
+    }
+
+    public void set(ShapeColor sc, int a, int b, int c) {
+        this.sc = sc;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+
+    @Override
+    public String toString() {
+        return "Triangle (2D (" + getShapeColor() + ", " + getA() + ", " + getB() + ", " + getC() + "))";
     }
 }
 
 class Trapezoid extends TwoD {
 
+    private int h;
+
+    public Trapezoid() {
+        this.sc = ShapeColor.Yellow;
+        this.a = 5;
+        this.b = 5;
+        this.c = 5;
+        this.d = 5;
+        this.h = 10;
+    }
+
+    public Trapezoid(ShapeColor sc, int a, int b, int c, int d, int h) {
+        this.sc = sc;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.h = h;
+    }
+
+    public Trapezoid(Trapezoid t) {
+        this(t.sc, t.a, t.b, t.c, t.d, t.h);
+    }
+
     @Override
     public double perimeter() {
+        return getA() + getB() + getC() + getD();
+    }
+
+    @Override
+    public double area() {
+        double aPlusBDivTwo = (getA() + getB()) / 2.0;
+        return aPlusBDivTwo * getHeight();
+    }
+
+    public int getA() {
+        return a;
+    }
+
+    public int getB() {
+        return b;
+    }
+
+    public int getC() {
+        return c;
+    }
+
+    public int getD() {
+        return d;
+    }
+
+    public int getHeight() {
+        return h;
+    }
+
+    public void set(ShapeColor sc, int a, int b, int c, int d, int h) {
+        this.sc = sc;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.h = h;
+    }
+
+    @Override
+    public String toString() {
+        return "Trapezoid (2D (" + getShapeColor() + ", " + getA() + ", " + getB()
+                + ", " + getC() + ", " + getD() + "))";
+    }
+}
+
+class Cube extends ThreeD {
+
+    public Cube() {
+        this.sc = ShapeColor.Green;
+        this.a = 5.0;
+    }
+
+    public Cube(ShapeColor sc, double a) {
+        this.sc = sc;
+        this.a = a;
+    }
+
+    public Cube(Cube c) {
+        this(c.sc, c.a);
+    }
+
+    @Override
+    public double volume() {
+        return Math.pow(getA(), 3);
+    }
+
+    @Override
+    public double area() {
+        return 6.0 * Math.pow(getA(), 2);
+    }
+
+    double getA() {
+        return a;
+    }
+
+    public void set(ShapeColor sc, double a) {
+        this.sc = sc;
+        this.a = a;
+    }
+
+    @Override
+    public String toString() {
+        return "Cube (3D (" + this.sc + ", " + getA() + "))";
+    }
+}
+
+class Tetrahedron extends ThreeD {
+
+    public Tetrahedron() {
+        this.sc = ShapeColor.Blue;
+        this.a = 5;
+    }
+
+    public Tetrahedron(ShapeColor sc, double a) {
+        this.sc = sc;
+        this.a = a;
+    }
+
+    public Tetrahedron(Tetrahedron t) {
+        this(t.sc, t.a);
+    }
+
+    @Override
+    public double volume() {
         return 0;
     }
 
     @Override
     public double area() {
         return 0;
+    }
+
+    public void set(ShapeColor sc, double a) {
+        this.sc = sc;
+        this.a = a;
+    }
+
+    @Override
+    public String toString() {
+        return "Tetrahedron (3D (" + this.sc + ", " + getA() + "))";
     }
 }
 
@@ -282,9 +474,25 @@ public class A2_S4_2022 {
     }
     public static void main(String[] args) {
         Circle testCircle = new Circle(ShapeColor.Blue, 12);
+        Rectangle testRectangle = new Rectangle(ShapeColor.Red, 14, 9);
+        Triangle testTriangle = new Triangle(ShapeColor.Yellow, 3,6,7);
+        Trapezoid testTrapezoid = new Trapezoid(ShapeColor.Green,12,12,12,12,16);
+        Cube testCube = new Cube(ShapeColor.Blue, 12.0);
 
         System.out.println(testCircle);
         System.out.println(testCircle.area());
         System.out.println(testCircle.perimeter());
+        System.out.println(testRectangle);
+        System.out.println(testRectangle.perimeter());
+        System.out.println(testRectangle.area());
+        System.out.println(testTriangle);
+        System.out.println(testTriangle.perimeter());
+        System.out.println(testTriangle.area());
+        System.out.println(testTrapezoid);
+        System.out.println(testTrapezoid.perimeter());
+        System.out.println(testTrapezoid.area());
+        System.out.println(testCube);
+        System.out.println(testCube.area());
+        System.out.println(testCube.volume());
     }
 }
