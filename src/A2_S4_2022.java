@@ -22,6 +22,7 @@ interface ForThreeD {
 interface Shape {
     double pi = Math.PI;
     double area();
+    String getName();
 }
 
 
@@ -129,9 +130,6 @@ abstract class TwoD implements ForTwoD, Shape {
         } else if (this.sc != null && this.a != 0 && this.b != 0 && this.c != 0 && this.d == 0) {
             // Triangle
             return "(2D (" + getShapeColor() + ", " + getA() + ", " + getB() + ", " + getC() + "))";
-        } else if (this.sc != null && this.a != 0 && this.b != 0 && this.c != 0 && this.d != 0) {
-            // Trapezoid
-            return "(2D (" + getShapeColor() + ", " + getA() + ", " + getB() + ", " + getC() + ", " + getD() + "))";
         } else {
             return "(2D ())";
         }
@@ -171,12 +169,14 @@ abstract class ThreeD implements  ForThreeD, Shape {
     }
 
     public void resize(double percentage) {
-
+        double percentDivided = percentage / 100;
+        this.a = a * (1 - percentDivided);
     }
 
     @Override
     public String toString() {
-        return "(3D (" + getShapeColor() + ", " + getA() + "))";
+        String formattedDecimalValue = String.format("%.3f", getA());
+        return "(3D (" + getShapeColor() + ", " + formattedDecimalValue + "))";
     }
 }
 
@@ -209,6 +209,11 @@ class Circle extends TwoD {
     public double area() {
         double radiusSquared = Math.pow(getRadius(), 2);
         return pi * radiusSquared;
+    }
+
+    @Override
+    public String getName() {
+        return "Circle";
     }
 
     @Override
@@ -250,6 +255,11 @@ class Rectangle extends TwoD {
     @Override
     public double area() {
         return getA() * getB();
+    }
+
+    @Override
+    public String getName() {
+        return "Rectangle";
     }
 
     public void set(ShapeColor sc, int length, int width) {
@@ -294,6 +304,11 @@ class Triangle extends TwoD {
         // Finding the area using Heron's formula
         double S = (getA() + getB() + getC()) / 2.0;
         return Math.sqrt(S * (S - getA()) * (S - getB()) * (S - getC()));
+    }
+
+    @Override
+    public String getName() {
+        return "Triangle";
     }
 
     @Override
@@ -363,6 +378,11 @@ class Trapezoid extends TwoD {
     }
 
     @Override
+    public String getName() {
+        return "Trapezoid";
+    }
+
+    @Override
     public int getA() {
         return a;
     }
@@ -397,7 +417,8 @@ class Trapezoid extends TwoD {
 
     @Override
     public String toString() {
-        return "Trapezoid " + super.toString();
+//        return "Trapezoid " + super.toString();
+        return "Trapezoid (2D (" + getShapeColor() + ", " + getA() + ", " + getB() + ", " + getC() + ", " + getD() + "), " + getHeight() + ")";
     }
 }
 
@@ -425,6 +446,11 @@ class Cube extends ThreeD {
     @Override
     public double area() {
         return 6.0 * Math.pow(getA(), 2);
+    }
+
+    @Override
+    public String getName() {
+        return "Cube";
     }
 
     @Override
@@ -470,6 +496,11 @@ class Tetrahedron extends ThreeD {
     @Override
     public double area() {
         return Math.sqrt(3) * Math.pow(getA(), 2);
+    }
+
+    @Override
+    public String getName() {
+        return "Tetrahedron";
     }
 
     double getA() {
@@ -520,6 +551,11 @@ class Sphere extends ThreeD {
     }
 
     @Override
+    public String getName() {
+        return "Sphere";
+    }
+
+    @Override
     public String toString() {
         return "Sphere " + super.toString();
     }
@@ -529,20 +565,17 @@ class Sphere extends ThreeD {
 public class A2_S4_2022 {
     private static int getInt() {
         Random rand = new Random();
-        int randInt = rand.nextInt(1, 20);
-        return randInt;
+        return rand.nextInt(1, 10);
     }
 
     private static double getDouble() {
         Random rand = new Random();
-        double randDouble = rand.nextDouble(1.0, 20.0);
-        return randDouble;
+        return rand.nextDouble(1.0, 10.0);
     }
 
     private static ShapeColor getColor() {
         Random rand = new Random();
         int randInt = rand.nextInt(0, ShapeColor.values().length);
-
         return ShapeColor.values()[randInt];
     }
 
@@ -580,9 +613,8 @@ public class A2_S4_2022 {
         );
 
         int randIndex = rand.nextInt(0, twoDShapes.size());
-        TwoD newTwoDShape = twoDShapes.get(randIndex);
 
-        return newTwoDShape;
+        return twoDShapes.get(randIndex);
     }
 
     private static ThreeD getThreeD() {
@@ -594,51 +626,74 @@ public class A2_S4_2022 {
                 new Tetrahedron(getColor(), getDouble())
         );
         int randIndex = rand.nextInt(0, threeDShapes.size());
-        ThreeD newThreeDShape = threeDShapes.get(randIndex);
 
-        return newThreeDShape;
+        return threeDShapes.get(randIndex);
     }
-    public static void main(String[] args) {
-//        Circle testCircle = new Circle(ShapeColor.Blue, 12);
-//        Rectangle testRectangle = new Rectangle(ShapeColor.Red, 14, 9);
-//        Triangle testTriangle = new Triangle(ShapeColor.Yellow, 3,6,7);
-//        Trapezoid testTrapezoid = new Trapezoid(ShapeColor.Green,12,13,14,15,16);
-        Cube testCube = new Cube(ShapeColor.Blue, 12.0);
-        Tetrahedron testTetrahedron = new Tetrahedron(ShapeColor.White, 31);
-        Sphere testSphere = new Sphere(ShapeColor.Yellow, 44);
-//
-//        System.out.println(testCircle);
-//        System.out.println(testCircle.area());
-//        System.out.println(testCircle.perimeter());
-//        System.out.println(testRectangle);
-//        System.out.println(testRectangle.perimeter());
-//        System.out.println(testRectangle.area());
-//        System.out.println(testTriangle);
-//        System.out.println(testTriangle.perimeter());
-//        System.out.println(testTriangle.area());
-//        System.out.println(testTrapezoid);
-//        System.out.println(testTrapezoid.perimeter());
-//        System.out.println(testTrapezoid.area());
-        System.out.println(testCube);
-        System.out.println(testCube.area());
-        System.out.println(testCube.volume());
-        System.out.println(testTetrahedron);
-        System.out.println(testTetrahedron.area());
-        System.out.println(testTetrahedron.volume());
-        System.out.println(testSphere);
-        System.out.println(testSphere.area());
-        System.out.println(testSphere.volume());
 
-//        for (int i = 0; i < 10; i++) {
-//            TwoD testShape = getTwoD();
-//            System.out.println(testShape);
-//        }
-//
-//        System.out.println("\n\n");
-//
-//        for (int j = 0; j < 10; j++) {
-//            ThreeD testThreeDShape = getThreeD();
-//            System.out.println(testThreeDShape);
-//        }
+    private static void process2DShape(Shape ss) {
+        TwoD shape = ((TwoD) ss);
+        shape.sc = getColor();
+        if (isTriangle(shape.getA(), shape.getB(), shape.getC())) {
+            System.out.printf("Updated color: %s\nArea = %.3f\nI am a %s shape with color changed to %s\n",
+                    shape.getShapeColor(),
+                    shape.area(),
+                    shape.getName(),
+                    shape.getShapeColor());
+        } else {
+            shape.a = 5;
+            shape.b = 5;
+            shape.c = 5;
+            System.out.printf("Updated color: %s\nArea = %.3f\nI am a %s shape with color changed to %s\n",
+                    shape.getShapeColor(),
+                    shape.area(),
+                    shape.getName(),
+                    shape.getShapeColor());
+        }
+        System.out.println("-----------------------------------------------------------------------");
+    }
+
+    private static void process3DShape(Shape ss) {
+        ThreeD shape = ((ThreeD) ss);
+        double resizePercent = getDouble();
+        System.out.printf("Surface area = %.3f\nVolume = %.3f\n", shape.area(), shape.volume());
+        shape.resize(resizePercent);
+        System.out.printf("Size reduced by %.1f%%: %s\nUpdated surface area = %.3f\nUpdated volume = %.3f\n",
+                resizePercent,
+                shape,
+                shape.area(),
+                shape.volume());
+        System.out.println("I am a " + shape.getName() + " shape");
+        System.out.println("-----------------------------------------------------------------------");
+    }
+
+    private static void displayList(ArrayList<Shape> alist) {
+        System.out.println("-----------------------------------------------------------------------");
+        for (int i = 0; i < alist.size(); i++) {
+            System.out.println("Shape " + (i+1) + ": " + alist.get(i));
+            if (alist.get(i) instanceof TwoD) {
+                process2DShape(alist.get(i));
+            } else {
+                process3DShape(alist.get(i));
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Random rand = new Random();
+        ArrayList<Shape> shapes = new ArrayList<>();
+
+        int k = 2;
+
+        while (k != 0) {
+            k = rand.nextInt(0,2);
+            if (k == 1) {
+                shapes.add(getTwoD());
+            } else {
+                shapes.add(getThreeD());
+            }
+        }
+
+        displayList(shapes);
+
     }
 }
