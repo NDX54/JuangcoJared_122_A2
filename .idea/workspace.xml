@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="751aaff8-b568-4446-b7f1-f8452cedbb41" name="Changes" comment="">
+    <list default="true" id="751aaff8-b568-4446-b7f1-f8452cedbb41" name="Changes" comment="Implemented all area() and perimeter() function for 2D shapes. As well as the area() and volume() function for 3D shapes.&#10;&#10;TODO - Implement the functions in main()">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/A2_S4_2022.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/A2_S4_2022.java" afterDir="false" />
     </list>
@@ -47,6 +47,14 @@
       <option name="presentableId" value="Default" />
       <updated>1666675320335</updated>
     </task>
+    <task id="LOCAL-00001" summary="Implemented all area() and perimeter() function for 2D shapes. As well as the area() and volume() function for 3D shapes.&#10;&#10;TODO - Implement the functions in main()">
+      <created>1666866073984</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1666866073984</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -59,5 +67,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Implemented all area() and perimeter() function for 2D shapes. As well as the area() and volume() function for 3D shapes.&#10;&#10;TODO - Implement the functions in main()" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented all area() and perimeter() function for 2D shapes. As well as the area() and volume() function for 3D shapes.&#10;&#10;TODO - Implement the functions in main()" />
   </component>
 </project>
