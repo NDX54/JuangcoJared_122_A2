@@ -565,12 +565,12 @@ class Sphere extends ThreeD {
 public class A2_S4_2022 {
     private static int getInt() {
         Random rand = new Random();
-        return rand.nextInt(1, 10);
+        return rand.nextInt(1, 31);
     }
 
     private static double getDouble() {
         Random rand = new Random();
-        return rand.nextDouble(1.0, 10.0);
+        return rand.nextDouble(1.0, 31.0);
     }
 
     private static ShapeColor getColor() {
@@ -583,7 +583,7 @@ public class A2_S4_2022 {
         double hypotenuseSquared = Math.pow(c, 2);
         double altitudeSquared = Math.pow(a, 2);
         double baseSquared = Math.pow(b, 2);
-        if (a >= (b + c) || c >= (b + a) || b >= (a + c)) {
+        if (a >= (b + c) || c >= (b + a) || b >= (a + c) || c == 0) {
             // Not a triangle
             return false;
         } else if (a == b && b == c) {
@@ -614,7 +614,13 @@ public class A2_S4_2022 {
 
         int randIndex = rand.nextInt(0, twoDShapes.size());
 
-        return twoDShapes.get(randIndex);
+        TwoD new2DShape = twoDShapes.get(randIndex);
+        if (isTriangle(new2DShape.getA(), new2DShape.getB(), new2DShape.getC()) && new2DShape.getD() == 0) {
+            return new2DShape;
+        } else {
+            new2DShape = new Triangle();
+            return new2DShape;
+        }
     }
 
     private static ThreeD getThreeD() {
@@ -633,22 +639,11 @@ public class A2_S4_2022 {
     private static void process2DShape(Shape ss) {
         TwoD shape = ((TwoD) ss);
         shape.sc = getColor();
-        if (isTriangle(shape.getA(), shape.getB(), shape.getC())) {
-            System.out.printf("Updated color: %s\nArea = %.3f\nI am a %s shape with color changed to %s\n",
-                    shape.getShapeColor(),
-                    shape.area(),
-                    shape.getName(),
-                    shape.getShapeColor());
-        } else {
-            shape.a = 5;
-            shape.b = 5;
-            shape.c = 5;
-            System.out.printf("Updated color: %s\nArea = %.3f\nI am a %s shape with color changed to %s\n",
-                    shape.getShapeColor(),
-                    shape.area(),
-                    shape.getName(),
-                    shape.getShapeColor());
-        }
+        System.out.printf("Updated color: %s\nArea = %.3f\nI am a %s shape with color changed to %s\n",
+                shape.getShapeColor(),
+                shape.area(),
+                shape.getName(),
+                shape.getShapeColor());
         System.out.println("-----------------------------------------------------------------------");
     }
 
@@ -668,12 +663,17 @@ public class A2_S4_2022 {
 
     private static void displayList(ArrayList<Shape> alist) {
         System.out.println("-----------------------------------------------------------------------");
-        for (int i = 0; i < alist.size(); i++) {
-            System.out.println("Shape " + (i+1) + ": " + alist.get(i));
-            if (alist.get(i) instanceof TwoD) {
-                process2DShape(alist.get(i));
-            } else {
-                process3DShape(alist.get(i));
+        if (alist.isEmpty()) {
+            System.out.println("No shapes are generated");
+            System.out.println("alist.isEmpty() -> " + alist.isEmpty());
+        } else {
+            for (int i = 0; i < alist.size(); i++) {
+                System.out.println("Shape " + (i+1) + ": " + alist.get(i));
+                if (alist.get(i) instanceof TwoD) {
+                    process2DShape(alist.get(i));
+                } else {
+                    process3DShape(alist.get(i));
+                }
             }
         }
     }
@@ -682,15 +682,15 @@ public class A2_S4_2022 {
         Random rand = new Random();
         ArrayList<Shape> shapes = new ArrayList<>();
 
-        int k = 2;
+        int k = rand.nextInt(0,3);
 
         while (k != 0) {
-            k = rand.nextInt(0,2);
             if (k == 1) {
                 shapes.add(getTwoD());
-            } else {
+            } else if (k == 2) {
                 shapes.add(getThreeD());
             }
+            k = rand.nextInt(0,3);
         }
 
         displayList(shapes);
